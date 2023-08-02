@@ -12,27 +12,26 @@ namespace WebApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Address
+    public partial class Manager
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Address()
+        public Manager()
         {
-            this.Pilots = new HashSet<Pilot>();
-            this.Managers = new HashSet<Manager>();
+            this.HangerDetails = new HashSet<HangerDetail>();
         }
     
+        public string ManagerId { get; set; }
+        public string ManagerName { get; set; }
+        public string SSNo { get; set; }
+        public System.DateTime Dob { get; set; }
+        public string Gender { get; set; }
+        public string MobileNo { get; set; }
+        public string Email { get; set; }
         public string AddressId { get; set; }
-        public string HouseNo { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Country { get; set; }
-        public string PinNo { get; set; }
         public Nullable<int> Id { get; set; }
-        public string AddressLine { get; set; }
     
+        public virtual Address Address { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pilot> Pilots { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Manager> Managers { get; set; }
+        public virtual ICollection<HangerDetail> HangerDetails { get; set; }
     }
 }

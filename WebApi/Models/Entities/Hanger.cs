@@ -5,15 +5,17 @@ using System.Web;
 
 namespace WebApi.Models.Entities
 {
-    public class PilotCls
+    public class Hanger
     {
-        public string PilotName { get; set; }
-        public string LicenseNo { get; set; }
-        public string SocialSecurityNo { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public Hanger() { }
+        public string HangerLocation { get; set; }
+        public int HangerCapacity { get; set; }
+        public string ManagerName { get; set; }
+        public string SocialSecuirtyNo { get; set; }
+        public DateTime Dob { get; set; }
         public string Gender { get; set; }
         public string MobileNo { get; set; }
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
         public string HouseNo { get; set; }
         public string AddressLine { get; set; }
         public string City { get; set; }

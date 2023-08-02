@@ -27,5 +27,7 @@ namespace WebApi.Models
     
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Pilot> Pilots { get; set; }
+        public virtual DbSet<HangerDetail> HangerDetails { get; set; }
+        public virtual DbSet<Manager> Managers { get; set; }
     }
 }
