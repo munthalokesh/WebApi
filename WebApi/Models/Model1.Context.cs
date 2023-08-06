@@ -12,6 +12,8 @@ namespace WebApi.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class AirportManagementEntities : DbContext
     {
@@ -29,5 +31,34 @@ namespace WebApi.Models
         public virtual DbSet<Pilot> Pilots { get; set; }
         public virtual DbSet<HangerDetail> HangerDetails { get; set; }
         public virtual DbSet<Manager> Managers { get; set; }
+        public virtual DbSet<Owner> Owner { get; set; }
+        public virtual DbSet<Planes> Planes { get; set; }
+        public virtual DbSet<Booking> Booking { get; set; }
+    
+        public virtual ObjectResult<GetAvailableHangars_Result> GetAvailableHangars(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAvailableHangars_Result>("GetAvailableHangars", fromDateParameter, toDateParameter);
+        }
+    
+        public virtual ObjectResult<GetAvailableHangarsDetails_Result> GetAvailableHangarsDetails(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAvailableHangarsDetails_Result>("GetAvailableHangarsDetails", fromDateParameter, toDateParameter);
+        }
     }
 }

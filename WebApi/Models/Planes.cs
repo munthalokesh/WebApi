@@ -12,21 +12,24 @@ namespace WebApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class HangerDetail
+    public partial class Planes
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public HangerDetail()
+        public Planes()
         {
             this.Booking = new HashSet<Booking>();
         }
     
-        public string HangerId { get; set; }
-        public string HangerLocation { get; set; }
-        public Nullable<int> HangerCapacity { get; set; }
-        public string ManagerId { get; set; }
+        public string ManufacturerName { get; set; }
+        public string RegNo { get; set; }
+        public string ModelNo { get; set; }
+        public string PlaneName { get; set; }
+        public Nullable<int> Capacity { get; set; }
+        public Nullable<int> OwnerId { get; set; }
+        public string PlaneId { get; set; }
         public Nullable<int> Id { get; set; }
     
-        public virtual Manager Manager { get; set; }
+        public virtual Owner Owner { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Booking> Booking { get; set; }
     }

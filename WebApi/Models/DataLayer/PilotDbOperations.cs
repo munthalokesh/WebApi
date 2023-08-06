@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -124,9 +125,27 @@ namespace WebApi.Models.DataLayer
                     return "1,error occured";
                 }
             }
+            catch (DbEntityValidationException d)
+            {
+                string s = "";
+                foreach (var eve in d.EntityValidationErrors)
+                {
+
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        s = ("1,Error on- Property: \"{0}\"",
+                             ve.PropertyName) + " " + s;
+                    }
+                }
+                return s;
+            }
             catch (AggregateException a)
             {
                 return "1,try again later";
+            }
+            catch (Exception E)
+            {
+                return "1,Unknown error occured please try again later";
             }
         }
     }

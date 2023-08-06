@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -71,6 +72,7 @@ namespace WebApi.Models.DataLayer
                                 address.State = H.State;
                                 address.AddressLine = H.AddressLine;
                                 address.PinNo = H.PinNo;
+                                address.Id=Address_id;  
                                 string AId = H.City.Substring(0, Math.Min(H.City.Length, 3)).ToUpper() + Address_id;
                                 address.AddressId = AId;
                                 Hd.Addresses.Add(address);
@@ -175,6 +177,34 @@ namespace WebApi.Models.DataLayer
                     return "Unable to add Hanger";
                 }
             }
+            catch (DbEntityValidationException d)
+            {
+                string s = "";
+                foreach (var eve in d.EntityValidationErrors)
+                {
+
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        s = ("1,Error on- Property: \"{0}\"",
+                             ve.PropertyName) + " " + s;
+                    }
+                }
+                return s;
+            }
+            catch (AggregateException a)
+            {
+                return "1,try again later";
+            }
+            catch (Exception E)
+            {
+                return "1,Unknown error occured please try again later";
+            }
+        }
+
+        public List<GetAvailableHangarsDetails_Result> GetHangers(DateTime fromdate,DateTime todate)
+        {
+            AirportManagementEntities Ae=new AirportManagementEntities();
+            return Ae.GetAvailableHangarsDetails(fromdate, todate).ToList();
         }
     }
 }

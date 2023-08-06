@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 using WebApi.Models;
 using WebApi.Models.DataLayer;
 using WebApi.Models.Entities;
 
 namespace WebApi.Controllers
 {
-    public class HangerDetailsController : ApiController
+    public class PlanesController : ApiController
     {
         // GET api/<controller>
         public IEnumerable<string> Get()
@@ -20,31 +20,27 @@ namespace WebApi.Controllers
         }
 
         // GET api/<controller>/5
-        public IHttpActionResult Get(DateTime fromdate,DateTime todate)
+        public IHttpActionResult Get(string email)
         {
-            HangerDetailsDbOperations db=new HangerDetailsDbOperations();
-            //DateTime fromDateFormatted = DateTime.ParseExact(fromdate.ToString(),"dd-MM-yyyy", CultureInfo.InvariantCulture);
-            //DateTime toDateFormatted = DateTime.ParseExact(todate.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture);
-            List<GetAvailableHangarsDetails_Result> l=db.GetHangers(fromdate, todate);
-            if (l != null || l.Count >=0)
+            AddressToClient a=PlanesDbOperations.GetAddress(email);
+            if(a != null)
             {
-                return Ok(l);
+                return Ok(a);
             }
             else
-
             {
-                return Content(HttpStatusCode.BadRequest, l);
+                return Content<AddressToClient>(HttpStatusCode.BadRequest,null);
             }
         }
 
         // POST api/<controller>
         [HttpPost]
-        public IHttpActionResult AddHanger([FromBody] Hanger h)
+        public IHttpActionResult AddPlane([FromBody] PlaneDetails p)
         {
-            HangerDetailsDbOperations Hd = new HangerDetailsDbOperations();
-            string s = Hd.AddHanger(h);
+            PlanesDbOperations dB=new PlanesDbOperations();
+            string s = dB.AddPlane(p);
             List<string> list = s.Split(',').ToList();
-            if (list[0].Equals("0"))
+            if (list[0] == "0")
             {
                 return Ok(list[1]);
             }

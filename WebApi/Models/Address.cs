@@ -19,6 +19,7 @@ namespace WebApi.Models
         {
             this.Pilots = new HashSet<Pilot>();
             this.Managers = new HashSet<Manager>();
+            this.Owner = new HashSet<Owner>();
         }
     
         public string AddressId { get; set; }
@@ -34,5 +35,7 @@ namespace WebApi.Models
         public virtual ICollection<Pilot> Pilots { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Manager> Managers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Owner> Owner { get; set; }
     }
 }

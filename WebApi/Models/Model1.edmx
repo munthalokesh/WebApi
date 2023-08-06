@@ -18,6 +18,16 @@
           <Property Name="Id" Type="int" />
           <Property Name="AddressLine" Type="nvarchar" MaxLength="150" />
         </EntityType>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="BookingId" />
+          </Key>
+          <Property Name="BookingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HangerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlaneId" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromDate" Type="date" />
+          <Property Name="ToDate" Type="date" />
+        </EntityType>
         <EntityType Name="HangerDetail">
           <Key>
             <PropertyRef Name="HangerId" />
@@ -42,6 +52,14 @@
           <Property Name="AddressId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Id" Type="int" />
         </EntityType>
+        <EntityType Name="Owner">
+          <Key>
+            <PropertyRef Name="OwnerId" />
+          </Key>
+          <Property Name="OwnerId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressId" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Pilot">
           <Key>
             <PropertyRef Name="PilotId" />
@@ -57,6 +75,43 @@
           <Property Name="AddressId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Id" Type="int" />
         </EntityType>
+        <EntityType Name="Planes">
+          <Key>
+            <PropertyRef Name="PlaneId" />
+          </Key>
+          <Property Name="ManufacturerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RegNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModelNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlaneName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Capacity" Type="int" />
+          <Property Name="OwnerId" Type="int" />
+          <Property Name="PlaneId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id" Type="int" />
+        </EntityType>
+        <Association Name="FK_Booking_HangerDetails">
+          <End Role="HangerDetail" Type="Self.HangerDetail" Multiplicity="0..1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HangerDetail">
+              <PropertyRef Name="HangerId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="HangerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Booking_Planes">
+          <End Role="Planes" Type="Self.Planes" Multiplicity="0..1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Planes">
+              <PropertyRef Name="PlaneId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="PlaneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HangerDetails_Manager">
           <End Role="Manager" Type="Self.Manager" Multiplicity="1" />
           <End Role="HangerDetail" Type="Self.HangerDetail" Multiplicity="*" />
@@ -81,6 +136,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Owner_Address">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="Owner" Type="Self.Owner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="AddressId" />
+            </Principal>
+            <Dependent Role="Owner">
+              <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Pilot_Address">
           <End Role="Address" Type="Self.Address" Multiplicity="1" />
           <End Role="Pilot" Type="Self.Pilot" Multiplicity="*" />
@@ -93,11 +160,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Planes_Owner">
+          <End Role="Owner" Type="Self.Owner" Multiplicity="0..1" />
+          <End Role="Planes" Type="Self.Planes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="OwnerId" />
+            </Principal>
+            <Dependent Role="Planes">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetAvailableHangars" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="date" Mode="In" />
+          <Parameter Name="ToDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="GetAvailableHangarsDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="date" Mode="In" />
+          <Parameter Name="ToDate" Type="date" Mode="In" />
+        </Function>
         <EntityContainer Name="AirportManagementModelStoreContainer">
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HangerDetail" EntityType="Self.HangerDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Owner" EntityType="Self.Owner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pilot" EntityType="Self.Pilot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Planes" EntityType="Self.Planes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Booking_HangerDetails" Association="Self.FK_Booking_HangerDetails">
+            <End Role="HangerDetail" EntitySet="HangerDetail" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Booking_Planes" Association="Self.FK_Booking_Planes">
+            <End Role="Planes" EntitySet="Planes" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
           <AssociationSet Name="FK_HangerDetails_Manager" Association="Self.FK_HangerDetails_Manager">
             <End Role="Manager" EntitySet="Manager" />
             <End Role="HangerDetail" EntitySet="HangerDetail" />
@@ -106,9 +204,17 @@
             <End Role="Address" EntitySet="Address" />
             <End Role="Manager" EntitySet="Manager" />
           </AssociationSet>
+          <AssociationSet Name="FK_Owner_Address" Association="Self.FK_Owner_Address">
+            <End Role="Address" EntitySet="Address" />
+            <End Role="Owner" EntitySet="Owner" />
+          </AssociationSet>
           <AssociationSet Name="FK_Pilot_Address" Association="Self.FK_Pilot_Address">
             <End Role="Address" EntitySet="Address" />
             <End Role="Pilot" EntitySet="Pilot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Planes_Owner" Association="Self.FK_Planes_Owner">
+            <End Role="Owner" EntitySet="Owner" />
+            <End Role="Planes" EntitySet="Planes" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -129,6 +235,7 @@
           <NavigationProperty Name="Pilots" Relationship="Self.FK_Pilot_Address" FromRole="Address" ToRole="Pilot" />
           <NavigationProperty Name="Managers" Relationship="AirportManagementModel.FK_Manager_Address" FromRole="Address" ToRole="Manager" />
           <Property Name="AddressLine" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Owner" Relationship="AirportManagementModel.FK_Owner_Address" FromRole="Address" ToRole="Owner" />
         </EntityType>
         <EntityType Name="Pilot">
           <Key>
@@ -175,6 +282,33 @@
             <End Role="Manager" EntitySet="Managers" />
             <End Role="HangerDetail" EntitySet="HangerDetails" />
           </AssociationSet>
+          <EntitySet Name="Owner" EntityType="AirportManagementModel.Owner" />
+          <EntitySet Name="Planes" EntityType="AirportManagementModel.Planes" />
+          <AssociationSet Name="FK_Owner_Address" Association="AirportManagementModel.FK_Owner_Address">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="Owner" EntitySet="Owner" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Planes_Owner" Association="AirportManagementModel.FK_Planes_Owner">
+            <End Role="Owner" EntitySet="Owner" />
+            <End Role="Planes" EntitySet="Planes" />
+          </AssociationSet>
+          <EntitySet Name="Booking" EntityType="AirportManagementModel.Booking" />
+          <AssociationSet Name="FK_Booking_HangerDetails" Association="AirportManagementModel.FK_Booking_HangerDetails">
+            <End Role="HangerDetail" EntitySet="HangerDetails" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Booking_Planes" Association="AirportManagementModel.FK_Booking_Planes">
+            <End Role="Planes" EntitySet="Planes" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <FunctionImport Name="GetAvailableHangars" ReturnType="Collection(AirportManagementModel.GetAvailableHangars_Result)">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetAvailableHangarsDetails" ReturnType="Collection(AirportManagementModel.GetAvailableHangarsDetails_Result)">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="HangerDetail">
           <Key>
@@ -186,6 +320,7 @@
           <Property Name="ManagerId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Id" Type="Int32" />
           <NavigationProperty Name="Manager" Relationship="AirportManagementModel.FK_HangerDetails_Manager" FromRole="HangerDetail" ToRole="Manager" />
+          <NavigationProperty Name="Booking" Relationship="AirportManagementModel.FK_Booking_HangerDetails" FromRole="HangerDetail" ToRole="Booking" />
         </EntityType>
         <EntityType Name="Manager">
           <Key>
@@ -227,6 +362,103 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Owner">
+          <Key>
+            <PropertyRef Name="OwnerId" />
+          </Key>
+          <Property Name="OwnerId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Address" Relationship="AirportManagementModel.FK_Owner_Address" FromRole="Owner" ToRole="Address" />
+          <NavigationProperty Name="Planes" Relationship="AirportManagementModel.FK_Planes_Owner" FromRole="Owner" ToRole="Planes" />
+        </EntityType>
+        <EntityType Name="Planes">
+          <Key>
+            <PropertyRef Name="PlaneId" />
+          </Key>
+          <Property Name="ManufacturerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RegNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlaneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Capacity" Type="Int32" />
+          <Property Name="OwnerId" Type="Int32" />
+          <Property Name="PlaneId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Owner" Relationship="AirportManagementModel.FK_Planes_Owner" FromRole="Planes" ToRole="Owner" />
+          <Property Name="Id" Type="Int32" />
+          <NavigationProperty Name="Booking" Relationship="AirportManagementModel.FK_Booking_Planes" FromRole="Planes" ToRole="Booking" />
+        </EntityType>
+        <Association Name="FK_Owner_Address">
+          <End Type="AirportManagementModel.Address" Role="Address" Multiplicity="0..1" />
+          <End Type="AirportManagementModel.Owner" Role="Owner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="AddressId" />
+            </Principal>
+            <Dependent Role="Owner">
+              <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Planes_Owner">
+          <End Type="AirportManagementModel.Owner" Role="Owner" Multiplicity="0..1" />
+          <End Type="AirportManagementModel.Planes" Role="Planes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owner">
+              <PropertyRef Name="OwnerId" />
+            </Principal>
+            <Dependent Role="Planes">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="BookingId" />
+          </Key>
+          <Property Name="BookingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HangerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlaneId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromDate" Type="DateTime" Precision="0" />
+          <Property Name="ToDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="HangerDetail" Relationship="AirportManagementModel.FK_Booking_HangerDetails" FromRole="Booking" ToRole="HangerDetail" />
+          <NavigationProperty Name="Planes" Relationship="AirportManagementModel.FK_Booking_Planes" FromRole="Booking" ToRole="Planes" />
+        </EntityType>
+        <Association Name="FK_Booking_HangerDetails">
+          <End Type="AirportManagementModel.HangerDetail" Role="HangerDetail" Multiplicity="0..1" />
+          <End Type="AirportManagementModel.Booking" Role="Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HangerDetail">
+              <PropertyRef Name="HangerId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="HangerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Booking_Planes">
+          <End Type="AirportManagementModel.Planes" Role="Planes" Multiplicity="0..1" />
+          <End Type="AirportManagementModel.Booking" Role="Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Planes">
+              <PropertyRef Name="PlaneId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="PlaneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetAvailableHangars_Result">
+          <Property Type="String" Name="HangerId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="HangerLocation" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="HangerCapacity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetAvailableHangarsDetails_Result">
+          <Property Type="String" Name="HangerId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="HangerLocation" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="HangerCapacity" Nullable="true" />
+          <Property Type="String" Name="ManagerName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SSNo" Nullable="true" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -289,6 +521,60 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Owner">
+            <EntityTypeMapping TypeName="AirportManagementModel.Owner">
+              <MappingFragment StoreEntitySet="Owner">
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Planes">
+            <EntityTypeMapping TypeName="AirportManagementModel.Planes">
+              <MappingFragment StoreEntitySet="Planes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PlaneId" ColumnName="PlaneId" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="PlaneName" ColumnName="PlaneName" />
+                <ScalarProperty Name="ModelNo" ColumnName="ModelNo" />
+                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Booking">
+            <EntityTypeMapping TypeName="AirportManagementModel.Booking">
+              <MappingFragment StoreEntitySet="Booking">
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="PlaneId" ColumnName="PlaneId" />
+                <ScalarProperty Name="HangerId" ColumnName="HangerId" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetAvailableHangars" FunctionName="AirportManagementModel.Store.GetAvailableHangars">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AirportManagementModel.GetAvailableHangars_Result">
+                <ScalarProperty Name="HangerId" ColumnName="HangerId" />
+                <ScalarProperty Name="HangerLocation" ColumnName="HangerLocation" />
+                <ScalarProperty Name="HangerCapacity" ColumnName="HangerCapacity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAvailableHangarsDetails" FunctionName="AirportManagementModel.Store.GetAvailableHangarsDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AirportManagementModel.GetAvailableHangarsDetails_Result">
+                <ScalarProperty Name="HangerId" ColumnName="HangerId" />
+                <ScalarProperty Name="HangerLocation" ColumnName="HangerLocation" />
+                <ScalarProperty Name="HangerCapacity" ColumnName="HangerCapacity" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="SSNo" ColumnName="SSNo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
