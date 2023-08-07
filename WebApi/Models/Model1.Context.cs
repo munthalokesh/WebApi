@@ -60,5 +60,18 @@ namespace WebApi.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAvailableHangarsDetails_Result>("GetAvailableHangarsDetails", fromDateParameter, toDateParameter);
         }
+    
+        public virtual ObjectResult<GetAvailablePlanes_Result> GetAvailablePlanes(Nullable<System.DateTime> selectedFromDate, Nullable<System.DateTime> selectedToDate)
+        {
+            var selectedFromDateParameter = selectedFromDate.HasValue ?
+                new ObjectParameter("SelectedFromDate", selectedFromDate) :
+                new ObjectParameter("SelectedFromDate", typeof(System.DateTime));
+    
+            var selectedToDateParameter = selectedToDate.HasValue ?
+                new ObjectParameter("SelectedToDate", selectedToDate) :
+                new ObjectParameter("SelectedToDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAvailablePlanes_Result>("GetAvailablePlanes", selectedFromDateParameter, selectedToDateParameter);
+        }
     }
 }

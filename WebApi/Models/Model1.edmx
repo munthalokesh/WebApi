@@ -180,6 +180,10 @@
           <Parameter Name="FromDate" Type="date" Mode="In" />
           <Parameter Name="ToDate" Type="date" Mode="In" />
         </Function>
+        <Function Name="GetAvailablePlanes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SelectedFromDate" Type="date" Mode="In" />
+          <Parameter Name="SelectedToDate" Type="date" Mode="In" />
+        </Function>
         <EntityContainer Name="AirportManagementModelStoreContainer">
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
@@ -308,6 +312,10 @@
           <FunctionImport Name="GetAvailableHangarsDetails" ReturnType="Collection(AirportManagementModel.GetAvailableHangarsDetails_Result)">
             <Parameter Name="FromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetAvailablePlanes" ReturnType="Collection(AirportManagementModel.GetAvailablePlanes_Result)">
+            <Parameter Name="SelectedFromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SelectedToDate" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="HangerDetail">
@@ -459,6 +467,16 @@
           <Property Type="String" Name="ManagerName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="SSNo" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="GetAvailablePlanes_Result">
+          <Property Type="String" Name="ManufacturerName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RegNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ModelNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PlaneName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Capacity" Nullable="true" />
+          <Property Type="Int32" Name="OwnerId" Nullable="true" />
+          <Property Type="String" Name="PlaneId" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Id" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -572,6 +590,20 @@
                 <ScalarProperty Name="HangerCapacity" ColumnName="HangerCapacity" />
                 <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
                 <ScalarProperty Name="SSNo" ColumnName="SSNo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAvailablePlanes" FunctionName="AirportManagementModel.Store.GetAvailablePlanes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AirportManagementModel.GetAvailablePlanes_Result">
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+                <ScalarProperty Name="ModelNo" ColumnName="ModelNo" />
+                <ScalarProperty Name="PlaneName" ColumnName="PlaneName" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="PlaneId" ColumnName="PlaneId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

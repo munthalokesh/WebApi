@@ -20,6 +20,7 @@ namespace WebApi.Controllers
         }
 
         // GET api/<controller>/5
+        [Route("api/HangerDetails/GetAvailableHangers")]
         public IHttpActionResult Get(DateTime fromdate,DateTime todate)
         {
             HangerDetailsDbOperations db=new HangerDetailsDbOperations();
@@ -36,9 +37,10 @@ namespace WebApi.Controllers
                 return Content(HttpStatusCode.BadRequest, l);
             }
         }
-
+        
         // POST api/<controller>
         [HttpPost]
+        [Route("api/HangerDetails/AddHanger")]
         public IHttpActionResult AddHanger([FromBody] Hanger h)
         {
             HangerDetailsDbOperations Hd = new HangerDetailsDbOperations();
@@ -62,6 +64,36 @@ namespace WebApi.Controllers
         // DELETE api/<controller>/5
         public void Delete(int id)
         {
+        }
+        [HttpGet]
+        [Route("api/HangerDetails/GetAvailablePlanes")]
+
+        public IHttpActionResult  GetPlanes(DateTime fromdate, DateTime todate)
+        {
+            HangerDetailsDbOperations hd=new HangerDetailsDbOperations();
+            List<GetAvailablePlanes_Result> l=hd.GetAvailabePlanes(fromdate, todate);
+            if(l != null || l.Count >=0)
+            { return Ok(l); }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, l);
+            }
+        }
+        [HttpPost]
+        [Route("api/HangerDetails/AddBooking")]
+        public IHttpActionResult AddBooking([FromBody] Booking b)
+        {
+            HangerDetailsDbOperations Hd = new HangerDetailsDbOperations();
+            string s = Hd.AddBooking(b);
+            List<string> list = s.Split(',').ToList();
+            if (list[0].Equals("0"))
+            {
+                return Ok(list[1]);
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, list[1]);
+            }
         }
     }
 }

@@ -196,6 +196,9 @@
     <Compile Include="Models\GetAvailableHangars_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetAvailablePlanes_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\HangerDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

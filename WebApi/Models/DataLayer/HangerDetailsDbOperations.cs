@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
@@ -205,6 +206,65 @@ namespace WebApi.Models.DataLayer
         {
             AirportManagementEntities Ae=new AirportManagementEntities();
             return Ae.GetAvailableHangarsDetails(fromdate, todate).ToList();
+        }
+
+        public List<GetAvailablePlanes_Result> GetAvailabePlanes(DateTime fromdate,DateTime todate)
+        {
+            AirportManagementEntities Ae = new AirportManagementEntities();
+            return Ae.GetAvailablePlanes(fromdate, todate).ToList();
+
+        }
+        public string AddBooking(Booking b)
+        {
+            try
+            {
+                AirportManagementEntities Ae = new AirportManagementEntities();
+                Ae.Booking.Add(b);
+                Ae.SaveChanges();
+                return $"0,Booking added from {b.FromDate} to {b.ToDate} for plane {b.PlaneId} in hanger {b.HangerId}";
+            }
+            catch(DbUpdateException d)
+            {
+                SqlException s = d.GetBaseException() as SqlException;
+                if(s.Message.Contains("PK_Booking"))
+                {
+                    return "1,Invalid BookingId";
+                }
+                else if(s.Message.Contains("FK_Booking_HangerDetails"))
+                {
+                    return "1,Invalid Hanger";
+                }
+                else if(s.Message.Contains("FK_Booking_Planes"))
+                {
+                    return "1,Invalid Plane";
+                }
+                else
+                {
+                    return "Unable to Book Hanger";
+                }
+            }
+            catch (DbEntityValidationException d)
+            {
+                string s = "";
+                foreach (var eve in d.EntityValidationErrors)
+                {
+
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        s = ("1,Error on- Property: \"{0}\"",
+                             ve.PropertyName) + " " + s;
+                    }
+                }
+                return s;
+            }
+            catch (AggregateException a)
+            {
+                return "1,try again later";
+            }
+            catch (Exception E)
+            {
+                return "1,Unknown error occured please try again later";
+            }
         }
     }
 }
