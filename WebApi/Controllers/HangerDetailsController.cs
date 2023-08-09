@@ -5,12 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WebApi.Models;
 using WebApi.Models.DataLayer;
 using WebApi.Models.Entities;
 
 namespace WebApi.Controllers
 {
+    [EnableCors("*","*","*")]
     public class HangerDetailsController : ApiController
     {
         // GET api/<controller>
@@ -94,6 +96,22 @@ namespace WebApi.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, list[1]);
             }
+        }
+
+        [Route("api/HangerDetails/GetAllHangers")]
+        public IHttpActionResult GetAllHangers()
+        {
+            HangerDetailsDbOperations h=new HangerDetailsDbOperations();
+            List<HangerInfo> list = h.GetAllHangers();
+            return Ok(list);
+        }
+        [HttpGet]
+        [Route("api/HangerDetails/GetStatus")]
+        public IHttpActionResult GetStatus(string HangerId,DateTime fromdate,DateTime todate)
+        {
+            HangerDetailsDbOperations h = new HangerDetailsDbOperations();
+            List<BookingInfo> l=h.GetStatus(HangerId,fromdate,todate);
+            return Ok(l);
         }
     }
 }
