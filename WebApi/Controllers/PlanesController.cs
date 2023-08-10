@@ -20,6 +20,7 @@ namespace WebApi.Controllers
         }
 
         // GET api/<controller>/5
+        [Route("api/Planes/CheckMail")]
         public IHttpActionResult Get(string email)
         {
             AddressToClient a=PlanesDbOperations.GetAddress(email);
@@ -35,6 +36,7 @@ namespace WebApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
+        [Route("api/Planes/AddPlane")]
         public IHttpActionResult AddPlane([FromBody] PlaneDetails p)
         {
             PlanesDbOperations dB=new PlanesDbOperations();
