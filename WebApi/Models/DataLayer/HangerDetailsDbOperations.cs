@@ -220,9 +220,23 @@ namespace WebApi.Models.DataLayer
             try
             {
                 AirportManagementEntities Ae = new AirportManagementEntities();
-                Ae.Booking.Add(b);
-                Ae.SaveChanges();
-                return $"0,Booking added from {b.FromDate} to {b.ToDate} for plane {b.PlaneId} in hanger {b.HangerId}";
+                int bookingCount = Ae.Booking
+                   .Where(x =>
+                       x.HangerId == b.HangerId &&
+                       x.FromDate >= b.FromDate &&
+                       x.ToDate <= b.ToDate)
+                   .Count();
+                int capacity = (int)Ae.HangerDetails.FirstOrDefault(x => x.HangerId == b.HangerId).HangerCapacity;
+                if(capacity>bookingCount)
+                {
+                    Ae.Booking.Add(b);
+                    Ae.SaveChanges();
+                    return $"0,Booking added from {b.FromDate} to {b.ToDate} for plane {b.PlaneId} in hanger {b.HangerId}";
+                }
+                else
+                {
+                    return $"1,Hanger full please select another hanger";
+                }
             }
             catch(DbUpdateException d)
             {

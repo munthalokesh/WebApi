@@ -34,6 +34,7 @@ namespace WebApi.Models
         public virtual DbSet<Owner> Owner { get; set; }
         public virtual DbSet<Planes> Planes { get; set; }
         public virtual DbSet<Booking> Booking { get; set; }
+        public virtual DbSet<Login> Login { get; set; }
     
         public virtual ObjectResult<GetAvailableHangars_Result> GetAvailableHangars(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate)
         {

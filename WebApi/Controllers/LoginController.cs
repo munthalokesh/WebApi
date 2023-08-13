@@ -6,11 +6,10 @@ using System.Net.Http;
 using System.Web.Http;
 using WebApi.Models;
 using WebApi.Models.DataLayer;
-using WebApi.Models.Entities;
 
 namespace WebApi.Controllers
 {
-    public class PilotController : ApiController
+    public class LoginController : ApiController
     {
         // GET api/<controller>
         public IEnumerable<string> Get()
@@ -19,28 +18,17 @@ namespace WebApi.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        [Route("api/Login/GetUser")]
+        public IHttpActionResult Get(string email)
         {
-            return "value";
+            LoginDbOperations d = new LoginDbOperations();
+            Login details = d.GetUser(email);
+            return Ok(details);
         }
 
         // POST api/<controller>
-
-        [HttpPost]
-        [Route("api/Pilot/AddPilot")]
-        public IHttpActionResult Post([FromBody] PilotCls p)
+        public void Post([FromBody] string value)
         {
-            PilotDbOperations pd = new PilotDbOperations();
-            string s = pd.AddingPilot(p);
-            List<string> list = s.Split(',').ToList();
-            if (list[0].Equals("0"))
-            {
-                return Ok(list[1]);
-            }
-            else
-            {
-                return Content(HttpStatusCode.BadRequest, list[1]);
-            }
         }
 
         // PUT api/<controller>/5

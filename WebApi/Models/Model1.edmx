@@ -38,6 +38,14 @@
           <Property Name="ManagerId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Id" Type="int" />
         </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="250" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Manager">
           <Key>
             <PropertyRef Name="ManagerId" />
@@ -188,6 +196,7 @@
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HangerDetail" EntityType="Self.HangerDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Owner" EntityType="Self.Owner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pilot" EntityType="Self.Pilot" Schema="dbo" store:Type="Tables" />
@@ -317,6 +326,7 @@
             <Parameter Name="SelectedFromDate" Mode="In" Type="DateTime" />
             <Parameter Name="SelectedToDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="Login" EntityType="AirportManagementModel.Login" />
         </EntityContainer>
         <EntityType Name="HangerDetail">
           <Key>
@@ -477,6 +487,14 @@
           <Property Type="String" Name="PlaneId" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="Id" Nullable="true" />
         </ComplexType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -607,6 +625,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Login">
+            <EntityTypeMapping TypeName="AirportManagementModel.Login">
+              <MappingFragment StoreEntitySet="Login">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

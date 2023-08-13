@@ -170,6 +170,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HangerDetailsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PilotController.cs" />
     <Compile Include="Controllers\PlanesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -184,6 +185,7 @@
     </Compile>
     <Compile Include="Models\DataLayer\AddressDbOperations.cs" />
     <Compile Include="Models\DataLayer\HangerDetailsDbOperations.cs" />
+    <Compile Include="Models\DataLayer\LoginDbOperations.cs" />
     <Compile Include="Models\DataLayer\PilotDbOperations.cs" />
     <Compile Include="Models\DataLayer\PlanesDbOperations.cs" />
     <Compile Include="Models\Entities\AddressToClient.cs" />
@@ -202,6 +204,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\HangerDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Login.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Manager.cs">
