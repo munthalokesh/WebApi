@@ -96,6 +96,7 @@ namespace WebApi.Models.DataLayer
                             Owner o = new Owner();
                             o.AddressId = Address_id;
                             o.Email = p.Email;
+                            o.OwnerName = p.OwnerName;
                             o.OwnerId = OwnerId;
                             context.Owner.Add(o);
                             Planes plane = new Planes();
@@ -117,6 +118,7 @@ namespace WebApi.Models.DataLayer
                             Owner o = new Owner();
                             o.AddressId = Isaddress.AddressId;
                             o.Email = p.Email;
+                            o.OwnerName = p.OwnerName;
                             o.OwnerId = OwnerId;
                             context.Owner.Add(o);
                             Planes plane = new Planes();
