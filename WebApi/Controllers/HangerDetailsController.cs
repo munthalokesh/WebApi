@@ -23,12 +23,19 @@ namespace WebApi.Controllers
 
         // GET api/<controller>/5
         [Route("api/HangerDetails/GetAvailableHangers")]
-        public IHttpActionResult Get(DateTime fromdate,DateTime todate)
+        public IHttpActionResult Get(string fromdate,string todate)
         {
             HangerDetailsDbOperations db=new HangerDetailsDbOperations();
+            DateTime FD = DateTime.ParseExact(fromdate, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture);
+            DateTime TD = DateTime.ParseExact(todate, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture);
+
+            string formattedFromDate = FD.ToString("yyyy-MM-dd");
+            DateTime parsedFromDate = DateTime.ParseExact(formattedFromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            string formattedToDate = TD.ToString("yyyy-MM-dd");
+            DateTime parsedToDate = DateTime.ParseExact(formattedToDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             //DateTime fromDateFormatted = DateTime.ParseExact(fromdate.ToString(),"dd-MM-yyyy", CultureInfo.InvariantCulture);
             //DateTime toDateFormatted = DateTime.ParseExact(todate.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture);
-            List<GetAvailableHangarsDetails_Result> l=db.GetHangers(fromdate, todate);
+            List<GetAvailableHangarsDetails_Result> l=db.GetHangers(parsedFromDate, parsedToDate);
             if (l != null && l.Count >0)
             {
                 return Ok(l);

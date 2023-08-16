@@ -203,7 +203,7 @@ namespace WebApi.Models.DataLayer
             }
         }
 
-        public List<GetAvailableHangarsDetails_Result> GetHangers(DateTime fromdate,DateTime todate)
+        public List<GetAvailableHangarsDetails_Result> GetHangers(DateTime? fromdate,DateTime? todate)
         {
             AirportManagementEntities Ae=new AirportManagementEntities();
             return Ae.GetAvailableHangarsDetails(fromdate, todate).ToList();
